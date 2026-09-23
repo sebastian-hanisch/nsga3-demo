@@ -1,5 +1,7 @@
 # 🧬 NSGA-III – Referenzpunkte statt Crowding-Distance
 
+**[→ Demo live ausprobieren](https://sebastianhanisch-nsga3-demo.streamlit.app/)**
+
 Drittes Stück der **Populations-Metaheuristiken-Linie** der "Konzepte"-Reihe im Portfolio von [Sebastian Hanisch](https://sebastianhanisch.net) –
 Operations Research und Machine Learning. Fortsetzung von [nsga2-demo](https://sebastianhanisch-nsga2-demo.streamlit.app/):
 NSGA-III (Deb & Jain, 2014) ersetzt NSGA-IIs Crowding-Distance durch ein festes Gitter aus **Referenzpunkten** auf dem
