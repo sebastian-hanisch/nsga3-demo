@@ -44,7 +44,7 @@ reproduziert deren Erzeugung wortgleich, bevor das vierte Merkmal (Risiko) dazuk
 
 NSGA-III-Kern (`nsga3_algorithm.py`): Referenzpunkte (Das-Dennis-Verfahren), Normalisierung (Idealpunkt, Extrempunkte über
 eine Achievement-Scalarizing-Function, Hyperebenen-Achsenabschnitte), Zuordnung (kürzester senkrechter Abstand),
-Nischenbildung bei der Überlebensauswahl. Mating-Selektion ist reines Rang-Turnier (wie im Originalpapier). Der komplette
+Nischenbildung bei der Überlebensauswahl. Mating-Selektion ist reines Rang-Turnier (Abweichung vom Originalpapier: dort werden die Eltern zufällig gezogen, ohne Auswahloperator). Der komplette
 NSGA-II-Kern ist wortgleich aus nsga2-demo kopiert und läuft im selben Repo als direkte Vergleichsbasis.
 
 ## Befunde / Korrekturen

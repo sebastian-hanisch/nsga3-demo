@@ -68,8 +68,8 @@ with st.expander("So funktioniert NSGA-III", expanded=True):
 2. **Normalisierung.** Idealpunkt (bester Wert je Ziel), Extrempunkte (über eine Achievement-Scalarizing-Function) und die
    Achsenabschnitte der Hyperebene durch sie - bildet die Population auf denselben Referenzraum ab.
 3. **Zuordnung.** Jedes Individuum wird dem Referenzpunkt mit dem kürzesten senkrechten Abstand zugeordnet.
-4. **Turnier + Crossover + Mutation.** Eltern werden nur nach **Rang** gewählt (kein Crowding/Niching bei der Paarung, wie im
-   Originalpapier) - Nachkommen entstehen wie beim GA/NSGA-II (Order Crossover, Tausch-Mutation).
+4. **Turnier + Crossover + Mutation.** Eltern werden nur nach **Rang** gewählt (kein Crowding/Niching bei der Paarung). Das weicht vom
+   Originalpapier ab: Deb & Jain (2014) verwenden keinen Auswahloperator und ziehen die Eltern zufällig; die Demo übernimmt das Rang-Turnier aus dem NSGA-II-Kern. Nachkommen entstehen wie beim GA/NSGA-II (Order Crossover, Tausch-Mutation).
 5. **Nischenbildung.** Eltern und Nachkommen (2N) werden nicht-dominiert sortiert; Fronten werden der Reihe nach übernommen.
    Passt die letzte Front nicht mehr vollständig: der am wenigsten besetzte Referenzpunkt bekommt Vorrang (bei Besetzung 0
    der nächstgelegene Kandidat, sonst ein zufälliger) - bis die Population voll ist.

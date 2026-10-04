@@ -6,8 +6,8 @@ NSGA-III ersetzt NSGA-IIs Crowding-Distance-Diversität durch: (1) eine Menge fe
 Zielraum-Simplex (Das-Dennis-Verfahren), (2) Normalisierung der Population (Idealpunkt + Extrempunkte über eine
 Achievement-Scalarizing-Function + Hyperebenen-Achsenabschnitte), (3) Zuordnung jedes Individuums zum nächsten
 Referenzpunkt, (4) Nischenbildung: beim Auffüllen der letzten, nicht vollständig passenden Front werden
-unterbesetzte Referenzpunkte bevorzugt. Mating-Selektion ist ein reines Rang-Turnier (kein Crowding/Niching dabei,
-wie im Originalpapier)."""
+unterbesetzte Referenzpunkte bevorzugt. Mating-Selektion ist ein reines Rang-Turnier (kein Crowding/Niching dabei);
+das Originalpapier (Deb & Jain 2014) zieht die Eltern dagegen zufällig, ohne Auswahloperator."""
 
 import warnings
 from dataclasses import dataclass, field
@@ -374,7 +374,7 @@ def niching_select(fronts, ref_assoc, ref_dist, n_refs, pop_size, rng):
 
 
 def rank_tournament_select(rank, k, n_select, rng):
-    """Turnierselektion nur nach Rang (kein Crowding/Niching bei der Paarung, wie im NSGA-III-Originalpapier)."""
+    """Turnierselektion nur nach Rang (kein Crowding/Niching bei der Paarung); weicht vom NSGA-III-Originalpapier ab, das die Eltern zufällig zieht."""
     n = len(rank)
     out = np.empty(n_select, dtype=np.int64)
     for s in range(n_select):
