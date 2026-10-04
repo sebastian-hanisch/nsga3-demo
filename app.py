@@ -263,10 +263,10 @@ $H$ - Punkte auf dem $(M-1)$-dimensionalen Einheitssimplex. Anzahl $\binom{H+M-1
 **Extrempunkte.** Für jede Achse $j$: das Individuum, das $\max_k \frac{f_k(x) - z^{\min}_k}{w_k}$ minimiert, mit
 $w = (\epsilon, \dots, 1_j, \dots, \epsilon)$ (Achievement-Scalarizing-Function).
 
-**Achsenabschnitte.** Löse $\sum_k x_k / a_k = 1$ für die $M$ Extrempunkte; Rückfall auf den Nadir (Maximalwert je Achse)
+**Achsenabschnitte.** Löse $\sum_k x_k / a_k = 1$ (im um $z^{\min}$ verschobenen Raum) für die $M$ Extrempunkte; Rückfall auf den Nadir (Maximalwert je Achse)
 bei singulärem System.
 
-**Normalisierung.** $f'_i(x) = \frac{f_i(x) - z^{\min}_i}{a_i - z^{\min}_i}$.
+**Normalisierung.** $f'_i(x) = \frac{f_i(x) - z^{\min}_i}{a_i}$.
 
 **Zuordnung.** Kürzester senkrechter Abstand von $f'(x)$ zu jeder Referenzlinie (Ursprung durch Referenzpunkt $r$); das
 Individuum gehört zur nächsten.
@@ -284,6 +284,6 @@ Sweep, Experimente).
 st.markdown("---")
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
-    "Operations Research und Machine Learning. Interesse an einer maßgeschneiderten Lösung für "
-    "Ihr Unternehmen? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html)"
+    "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
+    "Mehr zur Reihe: [Populations-Metaheuristiken: GA bis Memetic](https://sebastianhanisch.net/konzepte-populations-metaheuristiken.html)."
 )
