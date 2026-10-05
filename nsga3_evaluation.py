@@ -13,6 +13,7 @@ import nsga3_constants as C
 import nsga3_scenario as S
 
 BRUTE_FORCE_MAX_N = 9
+OBJ_DECIMALS = 6           # Zielwerte gelten als gleich, wenn sie sich erst jenseits dieser Nachkommastelle unterscheiden
 
 
 @dataclass(frozen=True)
@@ -135,12 +136,16 @@ def saturation_share(front1_history, pop_size):
 
 def brute_force_front(n_nodes, fn):
     """Alle (n_nodes - 1)! Touren. Gibt (alle Objektive, eindeutige nicht-dominierte Zielwerte) zurück - dedupliziert vor der
-    Nicht-Dominanz-Prüfung (siehe nsga2-demo: zwei Touren können denselben Zielwert erreichen)."""
+    Nicht-Dominanz-Prüfung (siehe nsga2-demo: zwei Touren können denselben Zielwert erreichen). "Eindeutig" heißt bis auf
+    OBJ_DECIMALS Nachkommastellen: eine gespiegelte Tour summiert dieselben Kanten in anderer Reihenfolge, die Zielwerte
+    unterscheiden sich dann um Fließkomma-Rauschen (~1e-13) - als exakt verschiedene Zeilen blieben beide nicht-dominiert
+    (Front um Scheinpunkte zu groß)."""
     tours = np.array([(0,) + p for p in permutations(range(1, n_nodes))], dtype=np.int64)
     obj = fn(tours)
-    unique_obj = np.unique(obj, axis=0)
-    nd_mask = A.non_dominated_mask(unique_obj)
-    return obj, unique_obj[nd_mask]
+    rounded = np.round(obj, OBJ_DECIMALS)
+    _, first = np.unique(rounded, axis=0, return_index=True)
+    nd_mask = A.non_dominated_mask(rounded[first])
+    return obj, obj[first][nd_mask]
 
 
 def front_coverage(true_front_obj, found_obj, tol=1e-6):

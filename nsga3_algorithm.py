@@ -306,6 +306,8 @@ def intercepts(extreme_pts, translated, n_obj):
     nur per Handrechnung, siehe Tests)."""
     try:
         a = np.linalg.solve(extreme_pts, np.ones(n_obj))     # a_k = 1 / Achsenabschnitt_k
+        if np.linalg.matrix_rank(extreme_pts) < n_obj:        # numerisch singulär (z. B. doppelter Extrempunkt): solve liefert dann Rauschen statt eines Fehlers
+            raise np.linalg.LinAlgError
         with warnings.catch_warnings():                       # a_k nahe 0 -> erwartete Division, wird gleich abgefangen
             warnings.simplefilter("ignore", RuntimeWarning)
             intercept = 1.0 / a

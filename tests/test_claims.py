@@ -83,7 +83,7 @@ def test_coverage_experiment_headline_claims():
 
 def test_comparison_experiment_headline_claims():
     report = E.comparison_experiment()
-    assert report["front_size"] == 23
-    assert report["nsga2"]["reached_median"] == pytest.approx(22, abs=5)
-    assert report["nsga3"]["reached_median"] == pytest.approx(17, abs=6)
+    assert report["front_size"] == 17
+    assert report["nsga2"]["reached_median"] == pytest.approx(16.5, abs=3)
+    assert report["nsga3"]["reached_median"] == pytest.approx(13, abs=4)
     assert report["nsga2"]["reached_median"] > report["nsga3"]["reached_median"]

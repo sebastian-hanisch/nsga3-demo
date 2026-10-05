@@ -20,7 +20,7 @@ unterbesetzte Punkte werden beim Auffüllen der Population bevorzugt.
 
 **Bei vier Zielen auf dieser Instanzgröße deckt NSGA-II den Zielraum robust BESSER ab als NSGA-III** - nicht nur in einem
 Einzellauf, sondern über 20 Läufe gemittelt, sowohl bei einer fairen Referenzpunkt-Abdeckung (Median 14 von 56 gegen 8 von
-56) als auch bei der Abdeckung der Brute-Force-Pareto-Front auf einer kleinen Instanz (Median 22 von 23 gegen 17 von 23).
+56) als auch bei der Abdeckung der Brute-Force-Pareto-Front auf einer kleinen Instanz (Median 16,5 von 17 gegen 13 von 17).
 Das ist die **Gegenmessung** zur ursprünglichen Erwartung, nicht das erhoffte Ergebnis - und wird hier absichtlich nicht
 versteckt.
 
@@ -56,13 +56,26 @@ Normierung (Idealpunkt/Extrempunkte/Achsenabschnitte aus der Vereinigung beider 
 bestehen (robust über mehrere Budgets, Populationsgrößen und die separate Brute-Force-Instanz geprüft) - siehe "Ehrlicher
 Befund" oben.
 
+Eine spätere Orakelprüfung fand zwei weitere Fehler.
+
+1. **Brute-Force-Referenz:** gespiegelte Touren summieren dieselben Kanten in anderer Reihenfolge, ihre Zielwerte unterscheiden sich
+   nur um Fließkomma-Rauschen (~1e-13), `np.unique` führte beide Zeilen getrennt und beide blieben nicht-dominiert - die Front der
+   kleinen Instanz hatte 23 statt 17 Punkte (Medianabdeckung früher 22 bzw. 17 von 23, richtig 16,5 bzw. 13 von 17). Fix:
+   Eindeutigkeit bis auf 6 Nachkommastellen (`OBJ_DECIMALS`).
+2. **Achsenabschnitte bei doppeltem Extrempunkt:** Ist ein Individuum für zwei Achsen zugleich Extrempunkt, ist das
+   Gleichungssystem singulär. `np.linalg.solve` wirft dann nicht immer, sondern liefert Rauschen, das als Achsenabschnitt in die
+   Normierung ging (im Standardlauf in 9 von 151 Generationen, auf der kleinen Instanz in 26 von 151). Jetzt fällt `intercepts`
+   bei Rangdefizit auf den Nadir zurück (wie dokumentiert). Das verschob die Einzellauf-Zahlen der Presets (z. B. Standardfall:
+   Front 1 deckt 15 statt 19 von 56 Referenzpunkten ab, Sättigung 62 % statt 69 %); die Mediane der Experimente (14 gegen 8 von
+   56) und die Reihenfolge NSGA-II vor NSGA-III blieben.
+
 ## Befunde (gemessen, keine Behauptungen)
 
 | Frage | Befund | Test |
 |---|---|---|
 | Deckt NSGA-III den Zielraum bei vier Zielen besser ab? | NSGA-II Median 14 von 56 Referenzpunkten, NSGA-III Median **8 von 56** - NSGA-II liegt vorn | `test_coverage_experiment_headline_claims` |
-| Schließt sich nsga2-demos Cliffhanger zugunsten von NSGA-III? | Auf derselben 8-Stopp-Instanz: NSGA-II Median 22 von 23 Frontpunkten, NSGA-III Median **17 von 23** - auch hier NSGA-II vorn | `test_comparison_experiment_headline_claims` |
-| Wie oft sättigt die Population (Front 1 = ganze Population)? | Standardfall (30 Stopps) 69 %, kleine Instanz (8 Stopps) 93 % der Generationen | `test_standardfall_preset_claims`, `test_kleine_instanz_preset_claims` |
+| Schließt sich nsga2-demos Cliffhanger zugunsten von NSGA-III? | Auf derselben 8-Stopp-Instanz: NSGA-II Median 16,5 von 17 Frontpunkten, NSGA-III Median **13 von 17** - auch hier NSGA-II vorn | `test_comparison_experiment_headline_claims` |
+| Wie oft sättigt die Population (Front 1 = ganze Population)? | Standardfall (30 Stopps) 62 %, kleine Instanz (8 Stopps) 93 % der Generationen | `test_standardfall_preset_claims`, `test_kleine_instanz_preset_claims` |
 | Stimmen Referenzpunkte/Normalisierung/Zuordnung mit der Literatur überein? | Exakte Übereinstimmung mit `pymoo` über 15–30 Zufallsinstanzen (2–4 Ziele) | `test_generate_reference_points_matches_pymoo`, `test_ideal_and_extreme_points_match_pymoo`, `test_associate_matches_pymoo` |
 
 ## Ehrliche Grenzen
@@ -79,7 +92,7 @@ Befund" oben.
 
 ## Tests
 
-103 Tests (`pytest tests/ -v`): Referenzpunkte/Idealpunkt/Extrempunkte/Zuordnung exakt gegen `pymoo` geprüft,
+110 Tests (`pytest tests/ -v`): Referenzpunkte/Idealpunkt/Extrempunkte/Zuordnung exakt gegen `pymoo` geprüft,
 Achsenabschnitte per Handrechnung (diagonaler Fall + singulärer Rückfall), Nischenbildung gegen konstruierte Beispiele,
 NSGA-III findet auf einer sehr kleinen Instanz nachweislich die Mehrheit der Brute-Force-Front, der kopierte NSGA-II-Kern
 erneut knapp kreuzgeprüft, AppTest-Rauchtests (jedes Preset, Generation-Slider inkl. Abspielen, Permalink-Grenzen, alle drei
